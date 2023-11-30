@@ -97,6 +97,26 @@ function App() {
       url: ["/strum/langbei/1.png"],
       type: "png",
     },
+    tkzc: {
+      name: "天空之城",
+      url: ["/finger/tkzc/1.png"],
+      type: "png",
+    },
+    anheqiao: {
+      name: "安和桥",
+      url: ["/finger/anheqiao/1.jpg"],
+      type: "jpg",
+    },
+    summer: {
+      name: "summer",
+      url: [
+        "/finger/summer/1.jpg",
+        "/finger/summer/2.jpg",
+        "/finger/summer/3,jpg",
+        "/finger/summer/4.jpg",
+      ],
+      type: "jpg",
+    },
   };
   return (
     <>
