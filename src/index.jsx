@@ -129,10 +129,10 @@ function App() {
     chashanliu: {
       name: "下一站，茶山刘",
       url: [
-        "/strum/chshanliu/1.jpg",
-        "/strum/chshanliu/2.jpg",
-        "/strum/chshanliu/3.jpg",
-        "/strum/chshanliu/4.jpg",
+        "/strum/chashanliu/1.jpg",
+        "/strum/chashanliu/2.jpg",
+        "/strum/chashanliu/3.jpg",
+        "/strum/chashanliu/4.jpg",
       ],
       type: "jpg",
     },
