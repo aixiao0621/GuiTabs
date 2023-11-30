@@ -118,13 +118,23 @@ function App() {
       type: "jpg",
     },
     wangwang: {
-      name: "王者荣耀",
+      name: "往往",
       url: [
         "/strum/wangwang/1.png",
         "/strum/wangwang/2.png",
         "/strum/wangwang/3.png",
       ],
       type: "png",
+    },
+    chashanliu: {
+      name: "下一站，茶山刘",
+      url: [
+        "/strum/chshanliu/1.jpg",
+        "/strum/chshanliu/2.jpg",
+        "/strum/chshanliu/3.jpg",
+        "/strum/chshanliu/4.jpg",
+      ],
+      type: "jpg",
     },
   };
   return (
