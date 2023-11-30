@@ -112,10 +112,19 @@ function App() {
       url: [
         "/finger/summer/1.jpg",
         "/finger/summer/2.jpg",
-        "/finger/summer/3,jpg",
+        "/finger/summer/3.jpg",
         "/finger/summer/4.jpg",
       ],
       type: "jpg",
+    },
+    wangwang: {
+      name: "王者荣耀",
+      url: [
+        "/strum/wangwang/1.png",
+        "/strum/wangwang/2.png",
+        "/strum/wangwang/3.png",
+      ],
+      type: "png",
     },
   };
   return (
