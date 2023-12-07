@@ -136,6 +136,20 @@ function App() {
       ],
       type: "jpg",
     },
+    luckyone: {
+      name: "Lucky One",
+      url: ["/strum/luckyone/1.png"],
+      type: "png",
+    },
+    distantechoes: {
+      name: "Distant Echoes",
+      url: [
+        "/strum/distantechoes/1.jpg",
+        "/strum/distantechoes/2.jpg",
+        "/strum/distantechoes/3.jpg",
+      ],
+      type: "jpg",
+    },
   };
   return (
     <>
