@@ -13,7 +13,7 @@ function App() {
       type: "png",
     },
     like_a_star: {
-      name: "like a star",
+      name: "Like a star",
       url: [
         "/finger/like_a_star/1.webp",
         "/finger/like_a_star/2.webp",
@@ -35,7 +35,7 @@ function App() {
       type: "png",
     },
     time_travel: {
-      name: "time travel",
+      name: "Time travel",
       url: [
         "/finger/time_travel/1.png",
         "/finger/time_travel/2.png",
@@ -47,7 +47,7 @@ function App() {
       type: "png",
     },
     flower: {
-      name: "flower",
+      name: "Flower",
       url: ["/finger/flower/1.png", "/finger/flower/2.png"],
       type: "png",
     },
@@ -108,7 +108,7 @@ function App() {
       type: "jpg",
     },
     summer: {
-      name: "summer",
+      name: "Summer",
       url: [
         "/finger/summer/1.jpg",
         "/finger/summer/2.jpg",
@@ -149,6 +149,16 @@ function App() {
         "/strum/distantechoes/3.jpg",
       ],
       type: "jpg",
+    },
+    duantan: {
+      name: "短叹",
+      url: [
+        "/strum/duantan/1.png",
+        "/strum/duantan/2.png",
+        "/strum/duantan/3.png",
+        "/strum/duantan/4.png",
+      ],
+      type: "png",
     },
   };
   return (
