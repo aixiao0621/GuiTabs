@@ -160,6 +160,26 @@ function App() {
       ],
       type: "png",
     },
+    gaobai: {
+      name: "告白",
+      url: [
+        "/strum/gaobai/1.png",
+        "/strum/gaobai/2.png",
+        "/strum/gaobai/3.png",
+        "/strum/gaobai/4.png",
+      ],
+      type: "png",
+    },
+    xinrong: {
+      name: "形容",
+      url: [
+        "/strum/xinrong/1.png",
+        "/strum/xinrong/2.png",
+        "/strum/xinrong/3.png",
+        "strum/xinrong/4.png",
+      ],
+      type: "png",
+    },
   };
   return (
     <>
