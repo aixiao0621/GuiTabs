@@ -187,7 +187,6 @@ function App() {
       ],
       type: "png",
     },
-    }
   };
   return (
     <>
