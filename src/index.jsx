@@ -180,6 +180,14 @@ function App() {
       ],
       type: "png",
     },
+    Lagrima: {
+      name: "Lagrima",
+      url: [
+        "/finger/Lagrima/1.png",
+      ],
+      type: "png",
+    },
+    }
   };
   return (
     <>
