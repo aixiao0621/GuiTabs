@@ -1,6 +1,5 @@
-import { Route, Router, Routes } from "@solidjs/router";
+import { Router } from "@solidjs/router";
 import { render } from "solid-js/web";
-import { Button } from "@suid/material";
 import TemporaryDrawer from "./tabs";
 import { createSignal } from "solid-js";
 
@@ -190,21 +189,25 @@ function App() {
   };
   return (
     <>
-      <div>
-        <Button variant="text" size="small">
+      <div
+      style={{
+        position: "fixed",
+        display: "flex",
+        "flex-direction": "row",
+      }}>
           <TemporaryDrawer
             tabs={allTabs}
             onClick={(title) => {
               setValue(title);
             }}
           ></TemporaryDrawer>
-        </Button>
         <a
           style={{
             "text-align": "right",
-            "text-decoration": "overline",
+            "text-decoration": "",
             "font-weight": "bold",
-            "margin-left": "10px",
+            "margin-top": "6px",
+            "font-size": "18px",
           }}
         >
           {allTabs[value()] ? allTabs[value()].name : "GuiTabs"}

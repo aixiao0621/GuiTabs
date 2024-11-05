@@ -1,9 +1,6 @@
-import MailIcon from "@suid/icons-material/Mail";
-import InboxIcon from "@suid/icons-material/MoveToInbox";
 import {
   Box,
   Button,
-  Divider,
   Drawer,
   List,
   ListItem,
@@ -13,6 +10,8 @@ import {
 } from "@suid/material";
 import { DrawerProps } from "@suid/material/Drawer";
 import { createMutable } from "solid-js/store";
+import MenuIcon from "@suid/icons-material/Menu";
+import { QueueMusic } from "@suid/icons-material";
 
 type Anchor = NonNullable<DrawerProps["anchor"]>;
 
@@ -52,7 +51,7 @@ export default function TemporaryDrawer(props) {
                   props["onClick"](key);
                 }}
               >
-                <ListItemIcon>{<InboxIcon />}</ListItemIcon>
+                <ListItemIcon>{<QueueMusic />}</ListItemIcon>
                 <ListItemText primary={value["name"]} />
               </ListItemButton>
             </ListItem>
@@ -64,7 +63,9 @@ export default function TemporaryDrawer(props) {
   const anchor: Anchor = "left";
   return (
     <div>
-      <Button onClick={toggleDrawer(anchor, true)}>list</Button>
+      <Button onClick={toggleDrawer(anchor, true)}>
+        <MenuIcon style={{ color: "black" }} />
+      </Button>
       <Drawer
         anchor={anchor}
         open={state[anchor]}
