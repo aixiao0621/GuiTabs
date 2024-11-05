@@ -93,7 +93,12 @@ function App() {
     },
     langbei: {
       name: "狼狈",
-      url: ["/strum/langbei/1.png"],
+      url: [
+        "/strum/langbei/1.png",
+        "/strum/langbei/2.png",
+        "/strum/langbei/3.png",
+        "/strum/langbei/4.png",
+      ],
       type: "png",
     },
     tkzc: {
@@ -181,26 +186,25 @@ function App() {
     },
     Lagrima: {
       name: "Lagrima",
-      url: [
-        "/finger/Lagrima/1.png",
-      ],
+      url: ["/finger/Lagrima/1.png"],
       type: "png",
     },
   };
   return (
     <>
       <div
-      style={{
-        position: "fixed",
-        display: "flex",
-        "flex-direction": "row",
-      }}>
-          <TemporaryDrawer
-            tabs={allTabs}
-            onClick={(title) => {
-              setValue(title);
-            }}
-          ></TemporaryDrawer>
+        style={{
+          position: "fixed",
+          display: "flex",
+          "flex-direction": "row",
+        }}
+      >
+        <TemporaryDrawer
+          tabs={allTabs}
+          onClick={(title) => {
+            setValue(title);
+          }}
+        ></TemporaryDrawer>
         <a
           style={{
             "text-align": "right",
