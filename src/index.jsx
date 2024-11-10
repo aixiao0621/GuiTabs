@@ -189,6 +189,16 @@ function App() {
       url: ["/finger/Lagrima/1.png"],
       type: "png",
     },
+    xiatiandefeng: {
+      name: "夏天的风",
+      url: [
+        "/finger/xiatiandefeng/1.png",
+        "/finger/xiatiandefeng/2.png",
+        "/finger/xiatiandefeng/3.png",
+        "/finger/xiatiandefeng/4.png",
+      ],
+      type: "tiff",
+    },
   };
   return (
     <>
