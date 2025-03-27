@@ -199,6 +199,20 @@ function App() {
       ],
       type: "tiff",
     },
+    skbljs: {
+      name: "斯卡布罗集市",
+      url: [
+        "/finger/skbljs/1.png",
+      ],
+      type: "png",
+      },
+    fretboard: {
+      name: "Fretboard",
+      url: [
+          "/finger/fretboard/1.webp",
+        ],
+      type: "webp",
+    },
   };
   return (
     <>
