@@ -1,37 +1,41 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import Fab from "@suid/material/Fab";
-import Box from "@suid/material/Box";
 import PlayArrowIcon from "@suid/icons-material/PlayArrow";
 import PauseIcon from "@suid/icons-material/Pause";
 import ArrowUpwardIcon from "@suid/icons-material/ArrowUpward";
 
+const SPEED_FACTOR = 0.4; // Adjust this to control scroll speed
+
 const ScrollButton = () => {
   const [isScrolling, setIsScrolling] = createSignal(false);
   const [isAtBottom, setIsAtBottom] = createSignal(false);
-  const [bpm, setBpm] = createSignal(60);
-  const [showSlider, setShowSlider] = createSignal(false);
+  const [bpm, setBpm] = createSignal(80);
+  const [isEditingBpm, setIsEditingBpm] = createSignal(false);
   const [isMinimized, setIsMinimized] = createSignal(false);
 
-  let longPressTimer;
-  let minimizeTimer;
-  let resumeTimer;
+  let longPressTimer = null;
+  let minimizeTimer = null;
+  let resumeTimer = null;
+  let animationFrameId = null;
 
   const handleScroll = () => {
     const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
     setIsAtBottom(atBottom);
     if (atBottom) {
-      stopScrolling(true); // Stop scrolling when bottom is reached
+      stopScrolling(true);
     }
   };
 
   const handleManualScroll = () => {
     if (!isScrolling()) return;
 
-    setIsScrolling(false); // Pause animation
+    cancelAnimationFrame(animationFrameId);
+    setIsScrolling(false);
     clearTimeout(resumeTimer);
 
     resumeTimer = setTimeout(() => {
+      if (!isAtBottom()) {
         startScrolling();
+      }
     }, 1000);
   };
 
@@ -44,6 +48,9 @@ const ScrollButton = () => {
       clearTimeout(longPressTimer);
       clearTimeout(minimizeTimer);
       clearTimeout(resumeTimer);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     });
   });
 
@@ -62,17 +69,19 @@ const ScrollButton = () => {
 
     let lastTime = performance.now();
     const scroll = (currentTime) => {
-      if (!isScrolling()) return;
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
-      const scrollAmount = (bpm() / 60) * (60 * deltaTime / 1000); // pixels per second
+      const scrollAmount = (bpm() * SPEED_FACTOR) * deltaTime / 1000;
       window.scrollBy(0, scrollAmount);
-      requestAnimationFrame(scroll);
+      animationFrameId = requestAnimationFrame(scroll);
     };
-    requestAnimationFrame(scroll);
+    animationFrameId = requestAnimationFrame(scroll);
   };
 
   const stopScrolling = (isAutomatic = false) => {
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
     setIsScrolling(false);
     clearTimeout(resumeTimer);
     if (!isAutomatic) {
@@ -83,20 +92,29 @@ const ScrollButton = () => {
     window.removeEventListener("touchstart", handleManualScroll);
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e) => {
+    if (isEditingBpm()) return;
     longPressTimer = setTimeout(() => {
-      setShowSlider(true);
+      e.preventDefault();
+      setIsEditingBpm(true);
+      longPressTimer = null;
     }, 500);
   };
 
   const handleMouseUp = () => {
-    clearTimeout(longPressTimer);
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+  };
+
+  const handleSliderMouseUp = () => {
+    setIsEditingBpm(false);
   };
 
   const handleClick = () => {
-    if (showSlider()) {
-        setShowSlider(false);
-        return;
+    if (isEditingBpm() || longPressTimer) {
+      return;
     }
     if (isAtBottom()) {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -111,51 +129,61 @@ const ScrollButton = () => {
   };
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         position: "fixed",
         bottom: "20px",
-        right: isMinimized() ? "-20px" : "20px",
-        transition: "right 0.5s",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        zIndex: 1000
+        right: isMinimized() ? (isEditingBpm() ? "20px" : "-20px") : "20px",
+        "z-index": 1000,
+        display: 'flex',
+        "align-items": 'center',
+        "justify-content": 'center',
+        width: isEditingBpm() ? '200px' : '56px',
+        height: '56px',
+        background: '#1976d2',
+        "border-radius": isEditingBpm() ? '28px' : '50%',
+        color: 'white',
+        transition: 'width 0.3s ease, border-radius 0.3s ease, right 0.5s',
+        cursor: 'pointer',
+        "box-shadow": '0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
       }}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
     >
-      {showSlider() && (
-        <Box sx={{
-          backgroundColor: 'white',
-          padding: '10px',
-          borderRadius: '10px',
-          marginBottom: '10px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-        }}>
+      {isEditingBpm() ? (
+        <div
+          style={{
+            width: '100%',
+            padding: '0 20px',
+            display: 'flex',
+            "flex-direction": 'column',
+            "align-items": 'center',
+            "justify-content": 'center'
+          }}
+          onMouseUp={handleSliderMouseUp}
+          onTouchEnd={handleSliderMouseUp}
+        >
           <input
             type="range"
-            min="30"
-            max="240"
+            min="40"
+            max="180"
             value={bpm()}
-            onInput={(e) => setBpm(parseInt(e.currentTarget.value))}
-            style={{
-              width: "100px",
-              cursor: "pointer"
+            onInput={(e) => {
+              e.stopPropagation();
+              setBpm(parseInt(e.currentTarget.value))
             }}
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: "100%", cursor: "pointer" }}
           />
-           <div style={{ "text-align": "center" }}>{bpm()} BPM</div>
-        </Box>
+          <div style={{ "font-size": "12px", "margin-top": "4px" }}>{bpm()} BPM</div>
+        </div>
+      ) : (
+        isAtBottom() ? <ArrowUpwardIcon /> : isScrolling() ? <PauseIcon /> : <PlayArrowIcon />
       )}
-      <Fab
-        color="primary"
-        onClick={handleClick}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onTouchStart={handleMouseDown}
-        onTouchEnd={handleMouseUp}
-      >
-        {isAtBottom() ? <ArrowUpwardIcon /> : isScrolling() ? <PauseIcon /> : <PlayArrowIcon />}
-      </Fab>
-    </Box>
+    </div>
   );
 };
 
