@@ -282,7 +282,7 @@ function App() {
           ></img>
         )}
       </div>
-      <ScrollButton />
+      {allTabs[value()] && <ScrollButton />}
     </>
   );
 }
