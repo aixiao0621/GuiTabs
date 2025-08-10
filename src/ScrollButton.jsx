@@ -3,13 +3,11 @@ import PlayArrowIcon from "@suid/icons-material/PlayArrow";
 import PauseIcon from "@suid/icons-material/Pause";
 import ArrowUpwardIcon from "@suid/icons-material/ArrowUpward";
 
-const SPEED_FACTOR = 0.4;
-
 const ScrollButton = () => {
   const [isScrolling, setIsScrolling] = createSignal(false);
   const [isAtBottom, setIsAtBottom] = createSignal(false);
-  const [bpm, setBpm] = createSignal(80);
-  const [isEditingBpm, setIsEditingBpm] = createSignal(false);
+  const [speed, setSpeed] = createSignal(30); // 滚动速度 (像素/秒)
+  const [isEditingSpeed, setIsEditingSpeed] = createSignal(false);
   const [isMinimized, setIsMinimized] = createSignal(false);
 
   let longPressTimer = null;
@@ -21,27 +19,27 @@ const ScrollButton = () => {
   const handleGlobalMouseUp = () => {
     clearTimeout(longPressTimer);
     longPressTimer = null;
-    if (isEditingBpm()) {
-      setIsEditingBpm(false);
+    if (isEditingSpeed()) {
+      setIsEditingSpeed(false);
     }
     window.removeEventListener("mousemove", handleGlobalMouseMove);
     window.removeEventListener("mouseup", handleGlobalMouseUp);
   };
 
   const handleGlobalMouseMove = (e) => {
-    if (isEditingBpm() && sliderRef) {
+    if (isEditingSpeed() && sliderRef) {
       const rect = sliderRef.getBoundingClientRect();
       const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const minBpm = 40;
-      const maxBpm = 180;
-      const newBpm = Math.round(minBpm + (maxBpm - minBpm) * percent);
-      setBpm(newBpm);
+      const minSpeed = 15;
+      const maxSpeed = 80;
+      const newSpeed = Math.round(minSpeed + (maxSpeed - minSpeed) * percent);
+      setSpeed(newSpeed);
     }
   };
 
   const handleMouseDown = () => {
     longPressTimer = setTimeout(() => {
-      setIsEditingBpm(true);
+      setIsEditingSpeed(true);
       window.addEventListener("mousemove", handleGlobalMouseMove);
     }, 500);
     window.addEventListener("mouseup", handleGlobalMouseUp);
@@ -100,11 +98,22 @@ const ScrollButton = () => {
     window.addEventListener("touchstart", handleManualScroll);
 
     let lastTime = performance.now();
+    let accumulatedScroll = 0; // 累积滚动距离
+
     const scroll = (currentTime) => {
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
-      const scrollAmount = (bpm() * SPEED_FACTOR) * deltaTime / 1000;
-      window.scrollBy(0, scrollAmount);
+
+      // 累积滚动距离
+      accumulatedScroll += speed() * deltaTime / 1000;
+
+      // 当累积距离大于等于1像素时才执行滚动
+      if (accumulatedScroll >= 1) {
+        const scrollPixels = Math.floor(accumulatedScroll);
+        window.scrollBy(0, scrollPixels);
+        accumulatedScroll -= scrollPixels; // 保留小数部分
+      }
+
       animationFrameId = requestAnimationFrame(scroll);
     };
     animationFrameId = requestAnimationFrame(scroll);
@@ -124,12 +133,12 @@ const ScrollButton = () => {
     window.removeEventListener("touchstart", handleManualScroll);
   };
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     if (longPressTimer) {
       clearTimeout(longPressTimer);
       longPressTimer = null;
-    } else if (isEditingBpm()) {
-        return;
+    } else if (isEditingSpeed()) {
+      return;
     }
 
     if (isAtBottom()) {
@@ -149,15 +158,15 @@ const ScrollButton = () => {
       style={{
         position: "fixed",
         bottom: "20px",
-        right: isMinimized() ? (isEditingBpm() ? "20px" : "-20px") : "20px",
+        right: isMinimized() ? (isEditingSpeed() ? "20px" : "-20px") : "20px",
         "z-index": 1000,
         display: 'flex',
         "align-items": 'center',
         "justify-content": 'center',
-        width: isEditingBpm() ? '200px' : '56px',
+        width: isEditingSpeed() ? '200px' : '56px',
         height: '56px',
         background: '#1976d2',
-        "border-radius": isEditingBpm() ? '28px' : '50%',
+        "border-radius": isEditingSpeed() ? '28px' : '50%',
         color: 'white',
         transition: 'width 0.3s ease, border-radius 0.3s ease, right 0.5s',
         cursor: 'pointer',
@@ -166,7 +175,7 @@ const ScrollButton = () => {
       onClick={handleClick}
       onMouseDown={handleMouseDown}
     >
-      {isEditingBpm() ? (
+      {isEditingSpeed() ? (
         <div
           ref={sliderRef}
           style={{
@@ -180,12 +189,12 @@ const ScrollButton = () => {
         >
           <input
             type="range"
-            min="40"
-            max="180"
-            value={bpm()}
+            min="15"
+            max="80"
+            value={speed()}
             style={{ width: "100%", "pointer-events": "none" }}
           />
-          <div style={{ "font-size": "12px", "margin-top": "4px", "pointer-events": "none" }}>{bpm()} BPM</div>
+          <div style={{ "font-size": "12px", "margin-top": "4px", "pointer-events": "none" }}>{speed()} px/s</div>
         </div>
       ) : (
         isAtBottom() ? <ArrowUpwardIcon /> : isScrolling() ? <PauseIcon /> : <PlayArrowIcon />
