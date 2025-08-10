@@ -2,6 +2,7 @@ import { Router } from "@solidjs/router";
 import { render } from "solid-js/web";
 import TemporaryDrawer from "./tabs";
 import { createSignal } from "solid-js";
+import ScrollButton from "./ScrollButton";
 
 function App() {
   const [value, setValue] = createSignal("GuiTabs");
@@ -281,6 +282,7 @@ function App() {
           ></img>
         )}
       </div>
+      {allTabs[value()] && <ScrollButton />}
     </>
   );
 }
