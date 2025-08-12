@@ -16,20 +16,23 @@ const ScrollButton = () => {
   let animationFrameId = null;
   let sliderRef = null;
 
-  const handleGlobalMouseUp = () => {
+  const handleGlobalEnd = () => {
     clearTimeout(longPressTimer);
     longPressTimer = null;
     if (isEditingSpeed()) {
       setIsEditingSpeed(false);
     }
-    window.removeEventListener("mousemove", handleGlobalMouseMove);
-    window.removeEventListener("mouseup", handleGlobalMouseUp);
+    window.removeEventListener("mousemove", handleGlobalMove);
+    window.removeEventListener("mouseup", handleGlobalEnd);
+    window.removeEventListener("touchmove", handleGlobalMove);
+    window.removeEventListener("touchend", handleGlobalEnd);
   };
 
-  const handleGlobalMouseMove = (e) => {
+  const handleGlobalMove = (e) => {
     if (isEditingSpeed() && sliderRef) {
       const rect = sliderRef.getBoundingClientRect();
-      const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
       const minSpeed = 15;
       const maxSpeed = 80;
       const newSpeed = Math.round(minSpeed + (maxSpeed - minSpeed) * percent);
@@ -37,12 +40,20 @@ const ScrollButton = () => {
     }
   };
 
-  const handleMouseDown = () => {
+  const handleStart = (e) => {
+    // 阻止触摸事件的默认行为
+    if (e.type === 'touchstart') {
+      e.preventDefault();
+    }
+
     longPressTimer = setTimeout(() => {
       setIsEditingSpeed(true);
-      window.addEventListener("mousemove", handleGlobalMouseMove);
+      window.addEventListener("mousemove", handleGlobalMove);
+      window.addEventListener("touchmove", handleGlobalMove, { passive: false });
     }, 500);
-    window.addEventListener("mouseup", handleGlobalMouseUp);
+
+    window.addEventListener("mouseup", handleGlobalEnd);
+    window.addEventListener("touchend", handleGlobalEnd);
   };
 
   const handleScroll = () => {
@@ -60,6 +71,7 @@ const ScrollButton = () => {
     setIsScrolling(false);
     clearTimeout(resumeTimer);
 
+    // 只有在用户手动滚动页面时才设置自动恢复，点击按钮停止不会触发恢复
     resumeTimer = setTimeout(() => {
       if (!isAtBottom()) {
         startScrolling();
@@ -73,8 +85,10 @@ const ScrollButton = () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleManualScroll);
       window.removeEventListener("touchstart", handleManualScroll);
-      window.removeEventListener("mousemove", handleGlobalMouseMove);
-      window.removeEventListener("mouseup", handleGlobalMouseUp);
+      window.removeEventListener("mousemove", handleGlobalMove);
+      window.removeEventListener("mouseup", handleGlobalEnd);
+      window.removeEventListener("touchmove", handleGlobalMove);
+      window.removeEventListener("touchend", handleGlobalEnd);
       clearTimeout(longPressTimer);
       clearTimeout(minimizeTimer);
       clearTimeout(resumeTimer);
@@ -119,12 +133,17 @@ const ScrollButton = () => {
     animationFrameId = requestAnimationFrame(scroll);
   };
 
-  const stopScrolling = (isAutomatic = false) => {
+  const stopScrolling = (isAutomatic = false, preventResume = false) => {
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }
     setIsScrolling(false);
-    clearTimeout(resumeTimer);
+
+    // 如果是手动停止（点击按钮），清除恢复定时器
+    if (preventResume) {
+      clearTimeout(resumeTimer);
+    }
+
     if (!isAutomatic) {
       setIsMinimized(false);
       clearTimeout(minimizeTimer);
@@ -137,6 +156,7 @@ const ScrollButton = () => {
     if (longPressTimer) {
       clearTimeout(longPressTimer);
       longPressTimer = null;
+      return; // 如果是长按被中断，不执行点击逻辑
     } else if (isEditingSpeed()) {
       return;
     }
@@ -147,7 +167,7 @@ const ScrollButton = () => {
       return;
     }
     if (isScrolling()) {
-      stopScrolling();
+      stopScrolling(false, true); // 手动停止，阻止自动恢复
     } else {
       startScrolling();
     }
@@ -173,7 +193,8 @@ const ScrollButton = () => {
         "box-shadow": '0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
       }}
       onClick={handleClick}
-      onMouseDown={handleMouseDown}
+      onMouseDown={handleStart}
+      onTouchStart={handleStart}
     >
       {isEditingSpeed() ? (
         <div
