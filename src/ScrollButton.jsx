@@ -15,10 +15,12 @@ const ScrollButton = () => {
   let resumeTimer = null;
   let animationFrameId = null;
   let sliderRef = null;
+  let isLongPressing = false;
 
   const handleGlobalEnd = () => {
     clearTimeout(longPressTimer);
     longPressTimer = null;
+    isLongPressing = false;
     if (isEditingSpeed()) {
       setIsEditingSpeed(false);
     }
@@ -33,7 +35,7 @@ const ScrollButton = () => {
       const rect = sliderRef.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-      const minSpeed = 15;
+      const minSpeed = 5;
       const maxSpeed = 80;
       const newSpeed = Math.round(minSpeed + (maxSpeed - minSpeed) * percent);
       setSpeed(newSpeed);
@@ -41,15 +43,24 @@ const ScrollButton = () => {
   };
 
   const handleStart = (e) => {
-    // 阻止触摸事件的默认行为
+    // 阻止触摸事件的默认行为和事件冒泡
     if (e.type === 'touchstart') {
       e.preventDefault();
+      e.stopPropagation();
     }
 
+    // 清除之前的定时器
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+    }
+
+    isLongPressing = true;
     longPressTimer = setTimeout(() => {
-      setIsEditingSpeed(true);
-      window.addEventListener("mousemove", handleGlobalMove);
-      window.addEventListener("touchmove", handleGlobalMove, { passive: false });
+      if (isLongPressing) {
+        setIsEditingSpeed(true);
+        window.addEventListener("mousemove", handleGlobalMove);
+        window.addEventListener("touchmove", handleGlobalMove, { passive: false });
+      }
     }, 500);
 
     window.addEventListener("mouseup", handleGlobalEnd);
@@ -152,14 +163,22 @@ const ScrollButton = () => {
     window.removeEventListener("touchstart", handleManualScroll);
   };
 
-  const handleClick = () => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      longPressTimer = null;
-      return; // 如果是长按被中断，不执行点击逻辑
-    } else if (isEditingSpeed()) {
+  const handleClick = (e) => {
+    // 如果正在编辑速度，不处理点击
+    if (isEditingSpeed()) {
       return;
     }
+
+    // 如果刚刚完成长按操作，不执行点击逻辑
+    if (longPressTimer || isLongPressing) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+      isLongPressing = false;
+      return;
+    }
+
+    // 阻止事件冒泡
+    e.stopPropagation();
 
     if (isAtBottom()) {
       window.scrollTo({ top: 0, behavior: "smooth" });
