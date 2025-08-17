@@ -258,24 +258,24 @@ function App() {
       ]
     },
     kdcm: {
-      name: "开到茶蘼",
+      name: "开到荼蘼",
       url: [
-        "/strum/kdcm/1.png"
+        "/strum/kdtm/1.png"
       ]
     },
     kdcm_a :{
-      name: "开到茶蘼_原声",
+      name: "开到荼蘼_清音",
       url: [
-        "/strum/kdcm_a/1.png"
+        "/strum/kdtm_a/1.png"
       ]
     },
     kdcm_b :{
-      name: "开到茶蘼_失真",
+      name: "开到荼蘼_失真",
       url: [
-        "/strum/kdcm_b/1.png",
-        "/strum/kdcm_b/2.png",
-        "/strum/kdcm_b/3.png",
-        "/strum/kdcm_b/4.png"
+        "/strum/kdtm_b/1.png",
+        "/strum/kdtm_b/2.png",
+        "/strum/kdtm_b/3.png",
+        "/strum/kdtm_b/4.png"
       ]
     },
   };
