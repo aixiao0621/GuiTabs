@@ -214,6 +214,46 @@ function App() {
       ],
       type: "webp",
     },
+    wlxq: {
+      name: "亡灵序曲",
+      url: [
+        "/strum/wlxq/1.png",
+        "/strum/wlxq/2.png",
+        "/strum/wlxq/3.png",
+        "/strum/wlxq/4.png",
+        "/strum/wlxq/5.png",
+        "/strum/wlxq/6.png",
+        "/strum/wlxq/7.png",
+        "/strum/wlxq/8.png",
+        "/strum/wlxq/9.png",
+        "/strum/wlxq/10.png",
+        "/strum/wlxq/11.png",
+        "/strum/wlxq/12.png",
+        "/strum/wlxq/13.png",
+        "/strum/wlxq/14.png"
+      ]
+    },
+    kdcm: {
+      name: "开到茶蘼",
+      url: [
+        "/strum/kdcm/1.png"
+      ]
+    },
+    kdcm_a :{
+      name: "开到茶蘼_原声",
+      url: [
+        "/strum/kdcm_a/1.png"
+      ]
+    },
+    kdcm_b :{
+      name: "开到茶蘼_失真",
+      url: [
+        "/strum/kdcm_b/1.png",
+        "/strum/kdcm_b/2.png",
+        "/strum/kdcm_b/3.png",
+        "/strum/kdcm_b/4.png"
+      ]
+    },
   };
   return (
     <>
