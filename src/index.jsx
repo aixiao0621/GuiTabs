@@ -233,6 +233,30 @@ function App() {
         "/strum/wlxq/14.png"
       ]
     },
+    xyh:{
+      name: "向阳花_主音",
+      url: [
+        "/strum/xyh/1.png",
+        "/strum/xyh/2.png",
+        "/strum/xyh/3.png",
+        "/strum/xyh/4.png",
+        "/strum/xyh/5.png",
+        "/strum/xyh/6.png"
+      ]
+    },
+    xyh_a:{
+      name: "向阳花_节奏",
+      url: [
+        "/strum/xyh_a/1.png",
+        "/strum/xyh_a/2.png",
+        "/strum/xyh_a/3.png",
+        "/strum/xyh_a/4.png",
+        "/strum/xyh_a/5.png",
+        "/strum/xyh_a/6.png",
+        "/strum/xyh_a/7.png",
+        "/strum/xyh_a/8.png"
+      ]
+    },
     kdcm: {
       name: "开到茶蘼",
       url: [
