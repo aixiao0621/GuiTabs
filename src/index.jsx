@@ -278,6 +278,23 @@ function App() {
         "/strum/kdtm_b/4.png"
       ]
     },
+    hsggxh: {
+      name: "红色高跟鞋",
+      url: [
+        "/strum/hsggxh/1.jpg.",
+        "/strum/hsggxh/1.jpg",
+        "/strum/hsggxh/2.jpg",
+        "/strum/hsggxh/3.jpg",
+        "/strum/hsggxh/4.jpg",
+        "/strum/hsggxh/5.jpg",
+        "/strum/hsggxh/6.jpg",
+        "/strum/hsggxh/7.jpg",
+        "/strum/hsggxh/8.jpg",
+        "/strum/hsggxh/9.jpg",
+        "/strum/hsggxh/99.jpg",
+      ]
+
+    }
   };
   return (
     <>
