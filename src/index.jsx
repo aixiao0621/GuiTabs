@@ -292,7 +292,8 @@ function App() {
         "/strum/hsggxh/8.jpg",
         "/strum/hsggxh/9.jpg",
         "/strum/hsggxh/99.jpg",
-      ]
+      ],
+      type: "jpg",
 
     }
   };
