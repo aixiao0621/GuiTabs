@@ -294,7 +294,22 @@ function App() {
         "/strum/hsggxh/99.jpg",
       ],
       type: "jpg",
-
+    },
+    jqq: {
+      name: "静悄悄",
+      url: [
+        "/strum/jqq/1.jpg",
+        "/strum/jqq/2.jpg"
+      ]
+    },
+    zyytnhcxwsb:{
+      name: "总有一天你会...",
+      url: [
+        "/strum/zyytnhcxwsb/1.png",
+        "/strum/zyytnhcxwsb/2.png",
+        "/strum/zyytnhcxwsb/3.png",
+        "/strum/zyytnhcxwsb/4.png"
+      ]
     }
   };
   return (
